@@ -1,65 +1,36 @@
-1. Install repo and SDK
-   1. sudo apt update
-   2. sudo apt upgrade
-   3. wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-   4. sudo dpkg -i packages-microsoft-prod.deb
-   5. rm packages-microsoft-prod.deb
-   6. sudo apt update
-   7. sudo apt upgrade
-   8. sudo apt-get install -y dotnet-sdk-7.0
+# Advent of Code 2021
+Language: Golang
 
-2. Install C# plugin for vscode
+# Description
+Advent of Code is an Advent calendar of small programming puzzles for a variety of skill sets and skill levels that can be solved in any programming language you like. People use them as a speed contest, interview prep, company training, university coursework, practice problems, or to challenge each other.
 
-3. dotnet new gitignore
-4. dotnet new tool-manifest
+You don't need a computer science background to participate - just a little programming knowledge and some problem solving skills will get you pretty far. Nor do you need a fancy computer; every problem has a solution that completes in at most 15 seconds on ten-year-old hardware.<br/>
+Source: [Advent of Code Github Topic](https://github.com/topics/advent-of-code)<br/>
 
-6. Scaffold the type of app you want
-   1. dotnet new sln
-   2. dotnet new console --output <foldername/namespace> --framework net7.0  //console app
-   3. dotnet new classlib --output <foldername/namespace> --framework net7.0  //class library app
-   4. dotnet new mstest --output <foldername/namespace> //unit test app
-   5. after adding your various projects need to now add them to the solution you oringally created
-      1. dotnet sln add <foldername/namespace>/<foldername/namespace>.csproj
-   6. to reference a classlib in a console/desktop app
-      1. dotnet add <namespace-folder-console-desktop>/<namespace-folder-console-desktop>.csproj reference <namespace-folder-classlib>/<namespace-folder-classlib>.csproj
-      2. in the case of test projects... 
-         1. dotnet add <testproject>/<testproject>.csproj reference <mainproject>/<mainproject>.csproj
-         2. Run test: dotnet test <testproject>/<testproject>.csproj
-
-7. CRTL+SHIFT+P.  In command palette type ">.NET: Generate Assets for Build and Debug".
-   
-8. dotnet run // run source code 
-9. dotnet run --project <project-name> eg. dotnet run --project day01
-
-10. dotnet publish -c release -r ubuntu.16.04-x64 --self-contained  // compile console app as "executable"
-
-# Linting
-dotnet new editorconfig
-
-add the below to .vscode/settings.json
-{
-  "omnisharp.enableRoslynAnalyzers": true,
-  "omnisharp.enableEditorConfigSupport": true
-}
-
-change .editorconfig to contain only 
-```
-root = true
-
-[*.cs]
-dotnet_analyzer_diagnostic.category-Style.severity = warning
-
-dotnet_diagnostic.IDE0003.severity = none
-dotnet_diagnostic.IDE0008.severity = none
-dotnet_diagnostic.IDE0058.severity = none
-dotnet_diagnostic.IDE0160.severity = none
-```
-
-add "<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>"  to .csproj file.
-
-
-
-dotnet new sln
-dotnet new console --output day01 --name day01 --framework net8.0 
-dotnet sln add day01/day01.csproj
-dotnet run --project day01
+[Day 01](https://github.com/janusqa/advent-of-code-2023/tree/main/day01)<br/>
+[Day 02](https://github.com/janusqa/advent-of-code-2023/tree/main/day02)<br/>
+[Day 03](https://github.com/janusqa/advent-of-code-2023/tree/main/day03)<br/>
+[Day 04](https://github.com/janusqa/advent-of-code-2023/tree/main/day04)<br/>
+[Day 05](https://github.com/janusqa/advent-of-code-2023/tree/main/day05)<br/>
+[Day 06](https://github.com/janusqa/advent-of-code-2023/tree/main/day06)<br/>
+[Day 07](https://github.com/janusqa/advent-of-code-2023/tree/main/day07)<br/>
+[Day 08](https://github.com/janusqa/advent-of-code-2023/tree/main/day08)<br/>
+[Day 09](https://github.com/janusqa/advent-of-code-2023/tree/main/day09)<br/>
+[Day 10](https://github.com/janusqa/advent-of-code-2023/tree/main/day10)<br/>
+[Day 11](https://github.com/janusqa/advent-of-code-2023/tree/main/day11)<br/>
+[Day 12](https://github.com/janusqa/advent-of-code-2023/tree/main/day12)<br/>
+[Day 13](https://github.com/janusqa/advent-of-code-2023/tree/main/day13)<br/>
+[Day 14](https://github.com/janusqa/advent-of-code-2023/tree/main/day14)<br/>
+[Day 15](https://github.com/janusqa/advent-of-code-2023/tree/main/day15)<br/>
+[Day 16](https://github.com/janusqa/advent-of-code-2023/tree/main/day16)<br/>
+[Day 17](https://github.com/janusqa/advent-of-code-2023/tree/main/day17)<br/>
+[Day 18](https://github.com/janusqa/advent-of-code-2023/tree/main/day18)<br/>
+[Day 19](https://github.com/janusqa/advent-of-code-2023/tree/main/day19)<br/>
+[Day 20](https://github.com/janusqa/advent-of-code-2023/tree/main/day20)<br/>
+[Day 21](https://github.com/janusqa/advent-of-code-2023/tree/main/day21)<br/>
+[Day 22](https://github.com/janusqa/advent-of-code-2023/tree/main/day22)<br/>
+[Day 23](https://github.com/janusqa/advent-of-code-2023/tree/main/day23)<br/>
+[Day 24](https://github.com/janusqa/advent-of-code-2023/tree/main/day24)<br/>
+[Day 25](https://github.com/janusqa/advent-of-code-2023/tree/main/day25)<br/>
+<br/>
+Keywords: aoc adventofcode
