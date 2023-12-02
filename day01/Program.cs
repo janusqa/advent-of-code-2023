@@ -5,7 +5,12 @@ namespace day01
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+
+            var part1 = Part1.Result();
+            Console.WriteLine(part1);
+
+            var part2 = Part2.Result();
+            Console.WriteLine(part2);
         }
     }
 }
