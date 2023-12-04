@@ -45,6 +45,7 @@ namespace day02
                         gameId++;
                     }
                     // result is equals to the sum of all games (calculated using gausses formula) minus invalid games
+                    // (((n + 1) * n) / 2)
                     result = (((gameId - 1 + 1) * (gameId - 1)) / 2) - invalidGames;
 
                 }
