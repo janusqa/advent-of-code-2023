@@ -1,4 +1,5 @@
 
+using System.Reflection.Emit;
 using System.Text;
 
 namespace day07
@@ -31,7 +32,6 @@ namespace day07
             // Console.WriteLine(string.Join("\n", hands.Select(h => h)));
             // Console.WriteLine(string.Join(" ", Card.Weights.Select(w => $"{w.Key}:{w.Value}")));
 
-
             hands.Sort(new HandComparer());
             for (int i = 0; i < hands.Count; i++)
             {
@@ -43,13 +43,7 @@ namespace day07
 
         public record Hand(string Label, int Bid)
         {
-            private readonly List<char> _cards = [.. Label.ToCharArray()];
             private readonly Dictionary<char, int> _type = Label.GroupBy(c => c).ToDictionary(c => c.Key, c => c.Count());
-            public List<char> Cards
-            {
-                get => _cards;
-                init { }
-            }
 
             public int Type
             {
@@ -77,7 +71,7 @@ namespace day07
 
             public override string ToString()
             {
-                return $"{Label} || {Bid} || {string.Join(", ", Cards)} || {Type}";
+                return $"{Label} || {Bid} || {Type}";
             }
         }
 
@@ -103,7 +97,7 @@ namespace day07
                 if (a == null || b == null) return 0;
                 if (a.Type > b.Type) return 1;
                 if (a.Type < b.Type) return -1;
-                foreach (var (ax, bx) in a.Cards.Zip(b.Cards, (ax, bx) => (ax, bx)))
+                foreach (var (ax, bx) in a.Label.Zip(b.Label, (ax, bx) => (ax, bx)))
                 {
                     if (Card.Weights[ax] > Card.Weights[bx]) return 1;
                     if (Card.Weights[ax] < Card.Weights[bx]) return -1;
