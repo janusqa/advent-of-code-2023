@@ -41,7 +41,7 @@ namespace day09
 
         private static long NextTerm(List<long> sequence)
         {
-            if (sequence.Aggregate(true, (acc, t) => acc && (t == 0))) return sequence[^1];
+            if (sequence.Aggregate(true, (acc, t) => acc && (t == 0))) return 0;
 
             var resultant = new List<long>();
 

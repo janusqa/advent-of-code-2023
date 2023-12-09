@@ -41,7 +41,7 @@ namespace day09
 
         private static long PrevTerm(List<long> sequence)
         {
-            if (sequence.Aggregate(true, (acc, t) => acc && (t == 0))) return sequence[0];
+            if (sequence.Aggregate(true, (acc, t) => acc && (t == 0))) return 0;
 
             var resultant = new List<long>();
 
@@ -51,9 +51,7 @@ namespace day09
                 resultant.Add(sequence[i] - sequence[i - 1]);
             }
 
-            long extrapolate = PrevTerm(resultant);
-
-            return sequence[0] - extrapolate;
+            return sequence[0] - PrevTerm(resultant);
         }
     }
 }
