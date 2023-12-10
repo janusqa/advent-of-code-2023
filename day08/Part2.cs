@@ -49,53 +49,53 @@ namespace day08
             var ghostsMeta = new Dictionary<int, long[]>(); // long[] -> times seen, last seen, cycle length
             int pointer = 0;
 
-            using (StreamWriter writer = new StreamWriter(@"./day08/output.txt"))
+            // using (StreamWriter writer = new StreamWriter(@"./day08/output.txt"))
+            // {
+
+            while (!locations.Select(node => node[^1]).Aggregate(true, (acc, n) => acc && (n == 'Z')))
             {
+                // writer.WriteLine($"{string.Join(" ", locations.Select(node => node[^1]))} -- {string.Join(" ", locations)}");
 
-                while (!locations.Select(node => node[^1]).Aggregate(true, (acc, n) => acc && (n == 'Z')))
+                foreach (var location in locations.Select((label, index) => (label, index)))
                 {
-                    // writer.WriteLine($"{string.Join(" ", locations.Select(node => node[^1]))} -- {string.Join(" ", locations)}");
+                    locations[location.index] = directions[pointer] == 'L' ? nodes[location.label].L : nodes[location.label].R;
 
-                    foreach (var location in locations.Select((label, index) => (label, index)))
+                    // each time we see a location ending with 'Z' collect the following metadata:
+                    // 1. the times we see such a node
+                    // 2. when last did we see the node a.k.a at which step did we last see node
+                    // 3. calculate the number of steps it took since we last saw such a node to seeing it again.
+                    if (location.label.EndsWith('Z'))
                     {
-                        locations[location.index] = directions[pointer] == 'L' ? nodes[location.label].L : nodes[location.label].R;
-
-                        // each time we see a location ending with 'Z' collect the following metadata:
-                        // 1. the times we see such a node
-                        // 2. when last did we see the node a.k.a at which step did we last see node
-                        // 3. calculate the number of steps it took since we last saw such a node to seeing it again.
-                        if (location.label.EndsWith('Z'))
+                        if (ghostsMeta.TryGetValue(location.index, out long[]? value))
                         {
-                            if (ghostsMeta.TryGetValue(location.index, out long[]? value))
+                            value[0] += 1;
+                            if (value[0] > 1)
                             {
-                                value[0] += 1;
-                                if (value[0] > 1)
-                                {
-                                    value[2] = result - value[1];
-                                    value[1] = result;
-                                }
+                                value[2] = result - value[1];
+                                value[1] = result;
                             }
-                            else
-                            {
-                                ghostsMeta[location.index] = [1, result, 0]; // times seen, last seen, cycle length
-                            }
-                            writer.WriteLine(string.Join(" ", ghostsMeta.Select(x => $"{x.Key}: {string.Join(" ", x.Value.Select(x => x))}")));
                         }
+                        else
+                        {
+                            ghostsMeta[location.index] = [1, result, 0]; // times seen, last seen, cycle length
+                        }
+                        // writer.WriteLine(string.Join(" ", ghostsMeta.Select(x => $"{x.Key}: {string.Join(" ", x.Value.Select(x => x))}")));
                     }
-                    if (ghostsMeta.Count == 6 && ghostsMeta.Aggregate(true, (acc, meta) => meta.Value[0] > 1))
-                    {
-                        // we have detected all cycles at which each "ghost" sees a node ending with 'Z'
-                        // we can now calculate the number of steps for each "ghost" to finally arrive 
-                        // simultaneously on a node ending with 'Z' by taking the LCM of the number of
-                        // times it takes each "ghost" to see a node ending with 'Z'. Luckily 
-                        // in this case it is a constant number of times for each ghost.
-                        return LCM(ghostsMeta.Select(meta => meta.Value[2]).ToArray());
-                    }
-                    // wrap pointer around to 0 using modulo. Note we increment pointer first then convert it
-                    pointer = (++pointer - 1 + directions.Length + 1) % directions.Length;
-                    result++;
                 }
+                if (ghostsMeta.Count == 6 && ghostsMeta.Aggregate(true, (acc, meta) => meta.Value[0] > 1))
+                {
+                    // we have detected all cycles at which each "ghost" sees a node ending with 'Z'
+                    // we can now calculate the number of steps for each "ghost" to finally arrive 
+                    // simultaneously on a node ending with 'Z' by taking the LCM of the number of
+                    // times it takes each "ghost" to see a node ending with 'Z'. Luckily 
+                    // in this case it is a constant number of times for each ghost.
+                    return LCM(ghostsMeta.Select(meta => meta.Value[2]).ToArray());
+                }
+                // wrap pointer around to 0 using modulo. Note we increment pointer first then convert it
+                pointer = (++pointer - 1 + directions.Length + 1) % directions.Length;
+                result++;
             }
+            // }
 
             return result;
         }
