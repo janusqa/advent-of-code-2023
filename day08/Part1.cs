@@ -45,12 +45,12 @@ namespace day08
             //     Console.WriteLine($"{node.Key} = ({node.Value.L}, {node.Value.R})");
             // }
 
-            string position = "AAA";
+            string location = "AAA";
             int pointer = 0;
 
-            while (position != "ZZZ")
+            while (location != "ZZZ")
             {
-                position = directions[pointer] == 'L' ? nodes[position].L : nodes[position].R;
+                location = directions[pointer] == 'L' ? nodes[location].L : nodes[location].R;
                 // wrap pointer around to 0 using modulo. Note we increment pointer first then convert it
                 pointer = (++pointer - 1 + directions.Length + 1) % directions.Length;
                 result++;
