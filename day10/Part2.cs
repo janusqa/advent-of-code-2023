@@ -74,7 +74,7 @@ namespace day10
                 sDirections.Add((R, C));
             }
 
-            // deduce what 'S' is and overwrite S with it correct represntation
+            // deduce what 'S' is and overwrite S with it's correct pipe represntation
             char S = pipes.Where(p => p.Value.Contains(sDirections[0]) && p.Value.Contains(sDirections[1])).Select(p => p.Key).First();
             // Console.Write($"{string.Join(", ", sDirections)} -- {S}");
             sketch[start[0]][start[1]] = S;
