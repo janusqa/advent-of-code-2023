@@ -55,7 +55,7 @@ namespace day12
             {
                 if (spring == '.')
                 {
-                    if (blockLength == blocks[pointer] && pointer < blocks.Count - 1) pointer++;
+                    if (pointer < blocks.Count && blockLength == blocks[pointer]) pointer++;
                     if (blockLength > 0) blocksProcessed++;
                     blockLength = 0;
                     continue;
