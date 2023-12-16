@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace day12
@@ -35,12 +34,8 @@ namespace day12
                 Console.WriteLine($"{row.Key} -> {string.Join("", row.Value.A)} | {string.Join(", ", row.Value.B)}");
             }
 
-            Console.WriteLine(IsValid("#.#.######".ToCharArray().ToList(), [1, 1, 3]));
-            Console.WriteLine(IsValid(".#...#....###.".ToCharArray().ToList(), [1, 1, 3]));
-            Console.WriteLine(IsValid(".#.###.#.######".ToCharArray().ToList(), [1, 3, 1, 6]));
-            Console.WriteLine(IsValid("####.#...#...".ToCharArray().ToList(), [4, 1, 1]));
-            Console.WriteLine(IsValid("#....######..#####.".ToCharArray().ToList(), [1, 6, 5]));
-            Console.WriteLine(IsValid(".###.##....#".ToCharArray().ToList(), [3, 2, 1]));
+            Console.WriteLine("---");
+            Combinations([], [], ['a', 'b', 'c']);
 
             return result;
         }
@@ -51,10 +46,11 @@ namespace day12
             int blockLength = 0;
             int blocksProcessed = 0;
 
-            foreach (var spring in springs)
+            foreach (var (spring, index) in springs.Select((s, i) => (s, i)))
             {
-                if (spring == '.')
+                if (spring == '.' || (spring == '#' && index == springs.Count - 1))
                 {
+                    if (spring == '#') blockLength++;
                     if (pointer < blocks.Count && blockLength == blocks[pointer]) pointer++;
                     if (blockLength > 0) blocksProcessed++;
                     blockLength = 0;
@@ -63,12 +59,24 @@ namespace day12
                 blockLength++;
             }
 
-            if (springs[^1] == '#')
-            {
-                if (blockLength > 0) blocksProcessed++;
-            }
+            return pointer == blocksProcessed;
+        }
 
-            return pointer == blocks.Count - 1 && pointer == blocksProcessed - 1;
+        public static void Combinations(List<List<char>> combinations, List<char> memo, List<char> source, int start = 0)
+        {
+            combinations.Add(new List<char>(memo));
+
+            for (int i = start; i < source.Count; i++)
+            {
+                // choose the current char
+                memo.Add(source[i]);
+
+                // backtrack the new combination
+                Combinations(combinations, memo, source, i + 1);
+
+                // don't choose the char
+                memo.RemoveAt(memo.Count - 1);
+            }
         }
     }
 }
