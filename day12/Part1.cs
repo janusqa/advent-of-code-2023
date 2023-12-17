@@ -8,7 +8,7 @@ namespace day12
         {
             int result = 0;
 
-            var recordings = new Dictionary<int, (List<char> A, List<int> B)>();
+            var recordings = new Dictionary<int, (List<char> S, List<int> B)>();
 
             try
             {
@@ -29,13 +29,18 @@ namespace day12
                 Console.WriteLine($"Error: {ex.Message}");
             }
 
-            foreach (var row in recordings)
-            {
-                Console.WriteLine($"{row.Key} -> {string.Join("", row.Value.A)} | {string.Join(", ", row.Value.B)}");
-            }
+            // foreach (var row in recordings)
+            // {
+            //     Console.WriteLine($"{row.Key} -> {string.Join("", row.Value.S)} | {string.Join(", ", row.Value.B)}");
+            // }
 
-            Console.WriteLine("---");
-            Combinations([], [], ['a', 'b', 'c']);
+            // Console.WriteLine(IsValid([.. ".###........".ToCharArray()], [3, 2, 1]));
+
+            foreach (var recording in recordings)
+            {
+                // Console.WriteLine($"== {string.Join("", recording.Value.S)} [{string.Join(",", recording.Value.B)}] ==");
+                result += Arrangements(recording.Value.S, recording.Value.B, "", recording.Value.S.Where(p => p == '?').Count(), []);
+            }
 
             return result;
         }
@@ -59,24 +64,51 @@ namespace day12
                 blockLength++;
             }
 
-            return pointer == blocksProcessed;
+            return pointer == blocksProcessed && pointer == blocks.Count;
         }
 
-        public static void Combinations(List<List<char>> combinations, List<char> memo, List<char> source, int start = 0)
+        public static int Arrangements(List<char> template, List<int> block, string pattern, int placeHolderCount, HashSet<string> memo)
         {
-            combinations.Add(new List<char>(memo));
+            if (memo.Contains(pattern)) return 0;
 
-            for (int i = start; i < source.Count; i++)
+            var symbol = new char[2] { '.', '#' };
+
+            int result = 0;
+
+            for (int i = 0; i < placeHolderCount; i++)
             {
-                // choose the current char
-                memo.Add(source[i]);
+                string s = new StringBuilder(pattern).Append(symbol[i % 2]).ToString();
+                // string s = $"{pattern}{symbol[i % 2]}";
+                if (s.Length < placeHolderCount) result += Arrangements(template, block, s, placeHolderCount, memo);
+                if (s.Length < placeHolderCount) continue;
+                if (s.Where(c => c == '#').Count() != block.Sum() - template.Where(c => c == '#').Count()) continue;
+                // Console.WriteLine($"level: {level} - len: {s.Length} - {s} - {s.Where(c => c == '#').Count()} - {string.Join("", template)} - {block.Sum()} - {template.Where(c => c == '#').Count()} - {block.Sum() - template.Where(c => c == '#').Count()}");
+                if (memo.Contains(s)) continue;
+                memo.Add(s);
+                int patternIdx = 0;
+                var templateCopy = template.ToList();
 
-                // backtrack the new combination
-                Combinations(combinations, memo, source, i + 1);
+                // Console.WriteLine($"seen: {string.Join(" | ", seen)}");
+                // Console.WriteLine($"template: {string.Join("", templateCopy)}");
 
-                // don't choose the char
-                memo.RemoveAt(memo.Count - 1);
+                foreach (var (p, idx) in template.Select((p, i) => (p, i)))
+                {
+                    if (p == '?')
+                    {
+                        templateCopy.Insert(idx, s[patternIdx]);
+                        templateCopy.RemoveAt(idx + 1);
+                        patternIdx++;
+                    }
+                }
+                if (IsValid(templateCopy, block))
+                {
+                    result++;
+                    // Console.WriteLine($"valid: {string.Join("", templateCopy)}");
+                }
             }
+
+            memo.Add(pattern);
+            return result;
         }
     }
 }
