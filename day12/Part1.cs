@@ -12,7 +12,7 @@ namespace day12
 
             try
             {
-                using (StreamReader reader = new StreamReader(@"./day12/input_test.txt", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader(@"./day12/input.txt", Encoding.UTF8))
                 {
                     string? line;
                     int row = 0;
@@ -78,7 +78,6 @@ namespace day12
             for (int i = 0; i < placeHolderCount; i++)
             {
                 string s = new StringBuilder(pattern).Append(symbol[i % 2]).ToString();
-                // string s = $"{pattern}{symbol[i % 2]}";
                 if (s.Length < placeHolderCount) result += Arrangements(template, block, s, placeHolderCount, memo);
                 if (s.Length < placeHolderCount) continue;
                 if (s.Where(c => c == '#').Count() != block.Sum() - template.Where(c => c == '#').Count()) continue;
