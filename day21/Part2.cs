@@ -14,7 +14,7 @@ namespace day21
 
             try
             {
-                using (StreamReader reader = new StreamReader(@"./day21/input_test.txt", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader(@"./day21/input.txt", Encoding.UTF8))
                 {
                     string? line;
                     int rowCount = 0;
@@ -65,11 +65,11 @@ namespace day21
                 steps.Enqueue(reach);
                 lastSeen = new HashSet<(int R, int C)>(reach);
                 int numSteps = Cycle(map, reach);
-                if (numSteps != -1) { Console.WriteLine($"found a match! -> {numSteps}"); break; }
+                if (numSteps != -1) { Console.WriteLine($"found a match! -> {numSteps}"); /*break;*/ }
                 stepsTaken++;
             }
 
-            Print(map, lastSeen);
+            // Print(map, lastSeen);
             result = lastSeen.Count;
             return result;
         }

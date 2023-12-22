@@ -4,9 +4,9 @@ namespace day12
 {
     public class Part1
     {
-        public static int Result()
+        public static long Result()
         {
-            int result = 0;
+            long result = 0;
 
             var recordings = new Dictionary<int, (List<char> S, List<int> B)>();
 
@@ -34,79 +34,86 @@ namespace day12
             //     Console.WriteLine($"{row.Key} -> {string.Join("", row.Value.S)} | {string.Join(", ", row.Value.B)}");
             // }
 
-            // Console.WriteLine(IsValid([.. ".###........".ToCharArray()], [3, 2, 1]));
-
             foreach (var recording in recordings)
             {
                 // Console.WriteLine($"== {string.Join("", recording.Value.S)} [{string.Join(",", recording.Value.B)}] ==");
-                result += Arrangements(recording.Value.S, recording.Value.B, "", recording.Value.S.Where(p => p == '?').Count(), []);
+                result += Arrangements(recording.Value.S, recording.Value.B, []);
             }
 
             return result;
         }
 
-        public static bool IsValid(List<char> springs, List<int> blocks)
+        // Dynamic programming with recursion
+        public static long Arrangements(List<char> template, List<int> blocks, Dictionary<string, long> memo)
         {
-            int pointer = 0;
-            int blockLength = 0;
-            int blocksProcessed = 0;
+            string memoKey = new StringBuilder(string.Join("", template)).Append(string.Join("", blocks)).ToString();
 
-            foreach (var (spring, index) in springs.Select((s, i) => (s, i)))
+            if (template.Count == 0) return blocks.Count > 0 ? 0 : 1;
+            if (memo.TryGetValue(memoKey, out long cachedResult)) return cachedResult;
+
+            // Console.WriteLine($"{depth - 1} -> {string.Join("", template)} {string.Join("", blocks)}");
+
+            long result = 0;
+            var symbols = new char[2] { '.', '#' };
+
+            var first = template[0];
+            var rest = template[1..];
+
+            if (first == symbols[0])
             {
-                if (spring == '.' || (spring == '#' && index == springs.Count - 1))
-                {
-                    if (spring == '#') blockLength++;
-                    if (pointer < blocks.Count && blockLength == blocks[pointer]) pointer++;
-                    if (blockLength > 0) blocksProcessed++;
-                    blockLength = 0;
-                    continue;
-                }
-                blockLength++;
+                // encoutered '.'
+                result = Arrangements(rest, blocks, memo);
             }
-
-            return pointer == blocksProcessed && pointer == blocks.Count;
-        }
-
-        public static int Arrangements(List<char> template, List<int> block, string pattern, int placeHolderCount, HashSet<string> memo)
-        {
-            if (memo.Contains(pattern)) return 0;
-
-            var symbol = new char[2] { '.', '#' };
-
-            int result = 0;
-
-            for (int i = 0; i < placeHolderCount; i++)
+            else if (first == '?')
             {
-                string s = new StringBuilder(pattern).Append(symbol[i % 2]).ToString();
-                if (s.Length < placeHolderCount) result += Arrangements(template, block, s, placeHolderCount, memo);
-                if (s.Length < placeHolderCount) continue;
-                if (s.Where(c => c == '#').Count() != block.Sum() - template.Where(c => c == '#').Count()) continue;
-                // Console.WriteLine($"level: {level} - len: {s.Length} - {s} - {s.Where(c => c == '#').Count()} - {string.Join("", template)} - {block.Sum()} - {template.Where(c => c == '#').Count()} - {block.Sum() - template.Where(c => c == '#').Count()}");
-                if (memo.Contains(s)) continue;
-                memo.Add(s);
-                int patternIdx = 0;
-                var templateCopy = template.ToList();
-
-                // Console.WriteLine($"seen: {string.Join(" | ", seen)}");
-                // Console.WriteLine($"template: {string.Join("", templateCopy)}");
-
-                foreach (var (p, idx) in template.Select((p, i) => (p, i)))
+                // encountered '?'
+                foreach (var symbol in symbols)
                 {
-                    if (p == '?')
+                    result += Arrangements(new List<char>([symbol, .. rest]), blocks, memo);
+                }
+            }
+            else
+            {
+                // encountered a '#'
+                if (blocks.Count == 0)
+                {
+                    result = 0;
+                }
+                else
+                {
+                    // if the current block we have started to look at is less or equal to size of string AND
+                    // any chararactes in the size of the block are only valid characters ('#', '?') then proceed
+                    // else this is not a valid result
+                    if (blocks[0] <= template.Count && template[..blocks[0]].All(s => s == symbols[1] || s == '?'))
                     {
-                        templateCopy.Insert(idx, s[patternIdx]);
-                        templateCopy.RemoveAt(idx + 1);
-                        patternIdx++;
+                        if (blocks[0] == template.Count)
+                        {
+                            // if the size of the string remaing is the size of the block
+                            // AND there this is the last block we are examining
+                            // then this is a good result otherwise it's not a valid result
+                            result = blocks.Count > 1 ? 0 : 1;
+                        }
+                        else if (template[blocks[0]] == symbols[0])
+                        {
+                            result = Arrangements(template[blocks[0]..], blocks[1..], memo);
+                        }
+                        else if (template[blocks[0]] == '?')
+                        {
+                            result = Arrangements(['.', .. template[(blocks[0] + 1)..]], blocks[1..], memo);
+                        }
+                        else
+                        {
+                            result = 0;
+                        }
+                    }
+                    else
+                    {
+                        result = 0;
                     }
                 }
-                if (IsValid(templateCopy, block))
-                {
-                    result++;
-                    // Console.WriteLine($"valid: {string.Join("", templateCopy)}");
-                }
             }
 
-            memo.Add(pattern);
+            memo[memoKey] = result;
             return result;
         }
     }
