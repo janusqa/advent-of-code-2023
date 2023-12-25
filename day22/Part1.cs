@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace day22
@@ -31,13 +32,42 @@ namespace day22
                 Console.WriteLine($"Error: {ex.Message}");
             }
 
+            // foreach (var brick in bricks)
+            // {
+            //     Console.WriteLine(string.Join(", ", brick));
+            // }
+
+            bricks = [.. bricks.OrderBy(b => Math.Min(b.s1.z, b.s2.z))];
+
             foreach (var brick in bricks)
             {
-                Console.WriteLine(string.Join(", ", brick));
+                if (brick.s1.z == 1) continue;
+
+
             }
 
 
+
             return result;
+        }
+
+        private static void Falling(
+            ((int x, int y, int z) s1, (int x, int y, int z) s2) brick,
+            List<((int x, int y, int z) s1, (int x, int y, int z) s2)> bricks
+        )
+        {
+
+
+
+        }
+
+        private static bool Touching(
+            ((int x, int y, int z) s1, (int x, int y, int z) s2) brick1,
+            ((int x, int y, int z) s1, (int x, int y, int z) s2) brick2
+        )
+        {
+            (Math.Abs(brick1.s1.z - brick2.s1.z) == 1 && true)
+            return true;
         }
     }
 }
