@@ -38,30 +38,27 @@ namespace day21
             int RUBOUND = map.Count - 1;
             int CUBOUND = map[0].Count - 1;
             var directions = new List<(int R, int C)> { (-1, 0), (0, 1), (1, 0), (0, -1) };
-            var steps = new Queue<HashSet<(int R, int C)>>();
-            int stepsTaken = 0;
+            var steps = new HashSet<(int R, int C)> { start };
 
-            steps.Enqueue([start]);
-            while (steps.Count > 0 && stepsTaken < 64)
+            foreach (var _ in Enumerable.Range(1, 64))
             {
-                var possibilities = steps.Dequeue();
                 var reach = new HashSet<(int R, int C)>();
-                foreach (var possibility in possibilities)
+                foreach (var step in steps)
                 {
-                    foreach (var direction in directions)
+                    foreach (var (R, C) in directions)
                     {
-                        var newR = possibility.R + direction.R;
-                        var newC = possibility.C + direction.C;
+                        var newR = step.R + R;
+                        var newC = step.C + C;
                         if (0 <= newR && newR <= RUBOUND && 0 <= newC && newC <= CUBOUND && map[newR][newC] != '#')
                         {
                             reach.Add((newR, newC));
                         }
                     }
                 }
-                steps.Enqueue(reach);
-                result = reach.Count;
-                stepsTaken++;
+                steps = reach;
             }
+
+            result = steps.Count;
             return result;
         }
     }
