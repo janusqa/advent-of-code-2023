@@ -15,21 +15,21 @@
 
 6. Scaffold the type of app you want
    1. dotnet new sln
-   2. dotnet new console --output <foldername/namespace> --framework net7.0  //console app
-   3. dotnet new classlib --output <foldername/namespace> --framework net7.0  //class library app
-   4. dotnet new mstest --output <foldername/namespace> //unit test app
+   2. dotnet new console --output [<foldername/namespace>] --framework net7.0  //console app
+   3. dotnet new classlib --output [<foldername/namespace>] --framework net7.0  //class library app
+   4. dotnet new mstest --output [<foldername/namespace>] //unit test app
    5. after adding your various projects need to now add them to the solution you oringally created
-      1. dotnet sln add <foldername/namespace>/<foldername/namespace>.csproj
+      1. dotnet sln add [<foldername/namespace>]/[<foldername/namespace>].csproj
    6. to reference a classlib in a console/desktop app
-      1. dotnet add <namespace-folder-console-desktop>/<namespace-folder-console-desktop>.csproj reference <namespace-folder-classlib>/<namespace-folder-classlib>.csproj
+      1. dotnet add [<namespace-folder-console-desktop>]/[<namespace-folder-console-desktop>].csproj reference [<namespace-folder-classlib>]/[<namespace-folder-classlib>].csproj
       2. in the case of test projects... 
-         1. dotnet add <testproject>/<testproject>.csproj reference <mainproject>/<mainproject>.csproj
-         2. Run test: dotnet test <testproject>/<testproject>.csproj
+         1. dotnet add [<testproject>]/[<testproject>].csproj reference [<mainproject>/<mainproject>].csproj
+         2. Run test: dotnet test [<testproject>/<testproject>].csproj
 
 7. CRTL+SHIFT+P.  In command palette type ">.NET: Generate Assets for Build and Debug".
    
 8. dotnet run // run source code 
-9. dotnet run --project <project-name> eg. dotnet run --project day01
+9. dotnet run --project [<project-name>] eg. dotnet run --project day01
 
 10. dotnet publish -c release -r ubuntu.16.04-x64 --self-contained  // compile console app as "executable"
 
@@ -63,3 +63,15 @@ dotnet new sln
 dotnet new console --output day01 --name day01 --framework net8.0 
 dotnet sln add day01/day01.csproj
 dotnet run --project day01
+
+Optional
+--------
+// Add a package from nuget to a project
+dotnet add [<PROJECT>] package [<PACKAGE>]
+dotnet add day24 package Microsoft.Z3 // used this to install the Z3 solver for day 24
+
+// Remove a package installed with nuget to a project
+dotnet remove [<PROJECT>] package [<PACKAGE>]
+
+// List packages in a project
+dotnet list [<PROJECT>] package 
