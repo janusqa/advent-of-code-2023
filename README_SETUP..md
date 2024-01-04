@@ -68,7 +68,7 @@ Optional
 --------
 // Add a package from nuget to a project
 dotnet add [<PROJECT>] package [<PACKAGE>]
-dotnet add day24 package Microsoft.Z3 // used this to install the Z3 solver for day 24
+dotnet add day24 package Microsoft.Z3 --version 4.11.2 // used this to install the Z3 v 4.11.2 solver for day 24
 
 // Remove a package installed with nuget to a project
 dotnet remove [<PROJECT>] package [<PACKAGE>]
